@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TH Covid-19 Situation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                method: "GET",
+                url: "https://covid19.ddc.moph.go.th/api/Cases/today-cases-all",
+            })
+                .done(function (msg) {
+                    console.log("Data Saved: ", msg);
+                    let new_case = msg[0].new_case;
+                    $("#new_case").html("+" + new_case);
+
+                    let total_case = msg[0].total_case;
+                    $("#total_case").html(total_case);
+
+                    let new_death = msg[0].new_death;
+                    $("#new_death").html("+" + new_death);
+
+                    let total_death = msg[0].total_death;
+                    $("#total_death").html(total_death);
+
+                    let new_recovered = msg[0].new_recovered;
+                    $("#new_recovered").html("+" + new_recovered);
+
+                    let total_recovered = msg[0].total_recovered;
+                    $("#total_recovered").html(total_recovered);
+
+                    let update_date = msg[0].update_date;
+                    const dateParts = update_date.split(' ')[0].split('-');
+                    const timeParts = update_date.split(' ')[1].split(':');
+                    const formattedDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
+                    const resultdate = formattedDate.toLocaleDateString('th-TH', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                    });
+                    $("#update_date").html(resultdate);
+                })
+                .fail(function () {
+                    alert("error");
+                });
+        });
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .container-fluid {
+            min-height: 100%;
+            background-color: #011329;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid" style="text-align: center; ">
+        <div style="text-align: center; color: aliceblue;">
+            <br>
+            <h2>สถานการณ์ Covid 19 </h2>
+            <h4>ในประเทศไทย</h4><br>
+            <h1 id="update_date"></h1><br>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card text-white bg-success mb-3" style="max-width: 100rem;box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);">
+                    <div class="card-body">
+                        <h5 class="card-title">หายป่วยวันนี้</h5>
+                        <h1 id="new_recovered"></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card text-white bg-danger mb-3" style="max-width: 100rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">ติดเชื้อเพิ่มวันนี้</h5>
+                        <h1 id="new_case"></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card text-white mb-3" style="max-width: 100rem; background-color: green;">
+                    <div class="card-body">
+                        <h5 class="card-title">หายป่วยสะสม</h5>
+                        <h1 id="total_recovered"></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card text-white mb-3" style="max-width: 100rem; background-color: #B13E2B;">
+                    <div class="card-body">
+                        <h5 class="card-title">ป่วยสะสม</h5>
+                        <h1 id="total_case"></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card text-white mb-3" style="max-width: 100rem; background-color: rgb(78, 73, 73);">
+                    <div class="card-body">
+                        <h5 class="card-title">เสียชีวิตเพิ่ม</h5>
+                        <h1 id="new_death"></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="card text-white bg-dark mb-3" style="max-width: 100rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">เสียชีวิตสะสม</h5>
+                        <h1 id="total_death"></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
